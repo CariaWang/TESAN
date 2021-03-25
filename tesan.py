@@ -79,7 +79,7 @@ for epoch in range(args.num_epoch):
         acc += num_correct.data[0]
         # sentiment loss
         sent_loss = criterion(out, y)
-        total_loss = 0.03*loss+sent_loss
+        total_loss = args.L*loss+sent_loss
         # optimize
         optimizer.zero_grad()
         total_loss.backward()
@@ -114,5 +114,5 @@ for epoch in range(args.num_epoch):
         y_numpy = y.cpu().data.numpy()
         test_ap.extend([np.corrcoef(out_exp[i], y_numpy[i])[0, 1] for i in range(out_exp.shape[0])])
         # loss
-        loss_epoch.extend((0.03*loss+sent_loss).cpu().data.tolist())
+        loss_epoch.extend((args.L*loss+sent_loss).cpu().data.tolist())
     print('Test Loss ={:.2f},  Test Acc ={:.4f}, Test AP={:.4f}'.format(np.mean(loss_epoch),np.mean(acc),np.mean(test_ap)))
